@@ -101,7 +101,7 @@
   }
 
   .section-padding {
-    padding: 5rem 0;
+    padding: 4rem 0;
   }
 
   .custom-icon {
@@ -290,45 +290,15 @@
     top: 8px;
   }
 
-
-
   /*---------------------------------------
-     HERO                
-  -----------------------------------------*/
-
-  .hero-title,
-  .email-link {
-    background: var(--dark-color);
-    border-radius: var(--border-radius-medium);
-    color: var(--white-color);
-    display: inline-block;
-    margin: 0.5rem 0;
-    padding: 0.5rem 2rem 1.5rem 2rem;
-	font-size: 2.2em;
-  }
-
-  .email-link {
-    background: var(--primary-color);
-    color: var(--dark-color);
-    font-size: var(--h4-font-size);
-    padding: 0.5rem 2rem 1rem 2rem;
-  }
-
-  .email-link:hover {
-    background: var(--dark-color);
-    color: var(--white-color);
-  }
-
-
-  /*---------------------------------------
-     ABOUT                
+     OTHER                
   -----------------------------------------*/
   
-  .about-third {
+  .other-third {
 	  margin: 2.2em -0.8em;
   }
 
-  .about-image {
+  .other-image {
     border-radius: var(--border-radius-small);
   }
 
