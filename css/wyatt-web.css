@@ -196,6 +196,12 @@
     color: var(--dark-color);
   }
 
+  .contact-form #submit-button:hover,
+  .navbar .custom-btn:hover {
+    background: var(--dark-color);
+    color: var(--white-color);
+  }
+
   .navbar-expand-lg .navbar-nav .nav-link {
     margin: 0 1.5rem;
     padding: 0;
@@ -308,7 +314,100 @@
   }
 
   /*---------------------------------------
-     CONTACT/SOCIAL LINKS              
+     CONTACT               
+  -----------------------------------------*/
+  
+  .contact-form .form-control {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(142, 140, 140, 0.35);
+    box-shadow: none;
+    border-radius: 0;
+    -webkit-appearance: none;
+    outline: 2px solid red;
+    color: var(--dark-color);
+    font-weight: var(--font-weight-light);
+    cursor: text;
+  }
+
+  .contact-form input {
+    height: calc(2.25rem + 10px);
+  }
+
+  .contact-form .form-group {
+    position: relative;
+  }
+
+  .contact-form .form-control,
+  .webform-label {
+    transition: all 0.4s;
+    touch-action: manipulation;
+  }
+
+  .webform-label {
+    cursor: text;
+    font-size: 12px;
+    font-weight: var(--font-weight-light);
+    margin-bottom: 5px;
+  }
+
+  .contact-form .form-control:placeholder-shown + .webform-label {
+    cursor: text;
+    max-width: 66.66%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform-origin: left bottom;
+    transform: translate(0, 2.125rem) scale(1.5);
+  }
+
+  .contact-form ::-webkit-input-placeholder {
+    opacity: 0;
+    transition: inherit;
+    color: var(--dark-color);
+  }
+
+  .contact-form ::-moz-placeholder {
+    opacity: 0;
+    transition: inherit;
+    color: var(--dark-color);
+  }
+
+  .contact-form .form-control:focus::-webkit-input-placeholder {
+    opacity: 1;
+  }
+
+  .contact-form .form-control:focus::-moz-placeholder {
+    opacity: 1;
+  }
+
+  .contact-form .form-control:not(:placeholder-shown) + .webform-label,
+  .contact-form .form-control:focus + .webform-label {
+    transform: translate(0, 0) scale(1);
+    cursor: pointer;
+    color: var(--gray-color);
+  }
+
+  .contact-form #submit-button {
+    background: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius-medium);
+    color: var(--dark-color);
+    cursor: pointer;
+    font-size: var(--p-font-size);
+    line-height: 0;
+    margin-top: 2.5rem;
+    white-space: nowrap;
+    max-width: 190px;
+  }
+
+  .copyright-text {
+    font-size: var(--base-font-size);
+  }
+
+
+  /*---------------------------------------
+     SOCIAL LINKS              
   -----------------------------------------*/
 
   .social-links {
