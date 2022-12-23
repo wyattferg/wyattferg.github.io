@@ -186,7 +186,7 @@
   }
 
   .navbar-brand {
-    color: var(--white-color);
+    color: var(--white-color) !important;
     font-weight: var(--font-weight-light);
     font-size: var(--h4-font-size);
   }
