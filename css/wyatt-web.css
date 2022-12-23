@@ -461,12 +461,7 @@
   }
 
   @media screen and (max-width: 992px) {
-
-    .hero-title {
-      font-size: 1.8em;
-      padding-bottom: 1rem;
-    }
-
+	  
     .email-link {
       font-size: 22px;
       padding: 0.5rem 2rem 0.7rem 2rem;
@@ -484,19 +479,7 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
-
-    .hero-text {
-      position: relative;
-      top: 1.5rem;
-    }
-  }
-
   @media screen and (max-width: 480px) {
-
-    .hero-title {
-      font-size: 26px;
-    }
 
     .email-link {
       font-size: 20px;
