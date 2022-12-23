@@ -324,7 +324,7 @@
     box-shadow: none;
     border-radius: 0;
     -webkit-appearance: none;
-    outline: 2px solid red;
+    outline: none;
     color: var(--dark-color);
     font-weight: var(--font-weight-light);
     cursor: text;
