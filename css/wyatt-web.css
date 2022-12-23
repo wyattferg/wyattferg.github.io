@@ -101,7 +101,7 @@
   }
 
   .section-padding {
-    padding: 15rem 0;
+    padding: 5rem 0;
   }
 
   .custom-icon {
@@ -341,81 +341,6 @@
     width: 30%;
     margin-right: 1rem;
   }
-
-
-  /*---------------------------------------
-     FAQ                 
-  -----------------------------------------*/
-
-  .faq .card-header {
-    padding: 0;
-  }
-
-  .faq .btn-link {
-    color: var(--dark-color);
-    font-size: var(--h6-font-size);
-    text-align: left;
-    display: block;
-    width: 100%;
-    padding: 1rem 2rem;
-  }
-
-  .faq .btn-link:focus, 
-  .faq .btn-link:hover {
-    color: var(--dark-color);
-    text-decoration: none;
-  }
-
-  .faq .card-body {
-    padding: 2rem;
-  }
-
-  .faq-info-text {
-    font-size: var(--base-font-size);
-    display: block;
-    margin: 1.5rem 2rem 0 2rem;
-  }
-
-
-  /*---------------------------------------
-     TESTIMONIALS               
-  -----------------------------------------*/
-
-  .testimonials {
-    background: #f9f9f9;
-  }
-
-  .testimonials-image {
-    margin: 0 1rem 1rem 1rem;
-  }
-
-  .testimonials-image img {
-    border-radius: var(--border-radius-medium);
-  }
-
-  .testimonials-info {
-    width: 100%;
-  }
-
-  .testimonials .owl-theme .owl-nav.disabled+.owl-dots {
-    margin-top: 2rem;
-  }
-
-  .testimonials .owl-theme .owl-dots .owl-dot {
-    outline: none;
-  }
-
-  .testimonials .owl-theme .owl-dots .owl-dot span {
-    width: 30px;
-    height: 3px;
-    margin: 5px;
-  }
-
-  .testimonials .owl-theme .owl-dots .owl-dot.active span, 
-  .testimonials .owl-theme .owl-dots .owl-dot:hover span {
-    background: var(--primary-color);
-  }
-
 
   /*---------------------------------------
      CONTACT               
