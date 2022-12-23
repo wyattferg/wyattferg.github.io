@@ -26,7 +26,7 @@
     --primary-color:        #aebda6;
     --white-color:          #ffffff;
     --dark-color:           #010101;
-    --menu-bg-color:        #333d2e;
+    --menu-bg-color:        #2F3A2C;
 
     --gray-color:           #909090;
     --p-color:              #7d7a7a;
@@ -326,6 +326,7 @@
     outline: none;
     color: var(--dark-color);
     font-weight: var(--font-weight-light);
+    margin: auto;
     padding-left: 0;
     cursor: text;
   }
@@ -397,6 +398,7 @@
     cursor: pointer;
     font-size: var(--p-font-size);
     line-height: 0;
+    margin: auto;
     margin-top: 2.5rem;
     padding: 1.5rem 1.8rem 1.8rem 1.8rem;
     white-space: nowrap;
