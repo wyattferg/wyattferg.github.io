@@ -398,7 +398,7 @@
     line-height: 0;
     margin-top: 2.5rem;
     white-space: nowrap;
-    max-width: 190px;
+    max-width: none;
   }
 
   .copyright-text {
