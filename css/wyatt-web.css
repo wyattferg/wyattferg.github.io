@@ -62,7 +62,7 @@ https://www.tooplate.com/view/2120-ben-resume
 
   body {
     font-family: var(--base-font-family);
-    padding-top: 500px;
+    padding-top: 180px;
   }
 
 
@@ -177,6 +177,9 @@ https://www.tooplate.com/view/2120-ben-resume
     background: var(--menu-bg-color);
     padding: 0.5rem 1rem;
     position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
     opacity: 1;
   }
 
@@ -184,6 +187,9 @@ https://www.tooplate.com/view/2120-ben-resume
     background: var(--menu-bg-color);
     padding: 0.5rem 1rem;
     position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
     opacity: 1;
   }
 
