@@ -137,20 +137,38 @@
     </section>
                  
      <!-- Contact -->
-     <section class="other section-padding" id="contact">
       <div class="container">
         <div class="row">
              
 
           <div class="col-12">
             <h3 class="mb-4 text-center">contact</h3>
-            
-               <p> Reach out to me using one of the links below! </p>
-               
+            <form action="email-form-script.php" method="post" class="contact-form webform"  role="form">
+                
+                <div class="form-group d-flex flex-column-reverse">
+                    <input type="text" class="form-control" name="full_name" id="cf-name" placeholder="Your Name">
+
+                    <label for="cf-name" class="webform-label">Full Name</label>
+                </div>
+
+                <div class="form-group d-flex flex-column-reverse">
+                    <input type="email" class="form-control" name="email" id="cf-email" placeholder="Your Email">
+
+                    <label for="cf-email" class="webform-label">Your Email</label>
+                </div>
+
+                <div class="form-group d-flex flex-column-reverse">
+                    <textarea class="form-control" rows="5" name="message" id="cf-message" placeholder="Your Message"></textarea>
+
+                    <label for="cf-message" class="webform-label">Message</label>
+                </div>
+
+                <button type="submit" class="form-control text-center" id="submit-button" name="submit">Send</button>
+            </form>
           </div>
 
             <div class="col-12">
-                <ul class="social-links">
+                <ul class="social-links mt-2">
                     <li><a href="https://www.instagram.com/__wyattjames__" target="_blank" rel="noopener noreferrer" class="fab fa-instagram"></a></li>
                     <li><a href="https://www.youtube.com/@__wyattjames__" target="_blank" rel="noopener noreferrer" class="fab fa-youtube"></a></li>
                 </ul>
@@ -158,7 +176,6 @@
             </div>
         </div>
       </div>
-    </section>
                  
      <!-- SCRIPTS -->
      <script src="js/jquery.min.js"></script>
