@@ -300,7 +300,7 @@
 
   .other-image {
     border-radius: var(--border-radius-small);
-    box-shadow: 0px 10px 15px var(--primary-color);
+    box-shadow: 0px 25px 15px var(--primary-color);
   }
 
   .profile-list li {
@@ -335,7 +335,6 @@
   }
 
   .contact-form .form-group {
-    margin: auto;
     position: relative;
   }
 
@@ -425,7 +424,7 @@
     display: inline-block;
     color: var(--p-color);
     font-size: var(--h6-font-size);
-    margin: 5px 20px 5px 0;
+    margin: 5px 20px 5px;
   }
 
   .social-links a:hover {
