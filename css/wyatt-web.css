@@ -175,21 +175,21 @@ https://www.tooplate.com/view/2120-ben-resume
 
   .navbar {
     background: var(--menu-bg-color);
-    padding: 0.5rem 1rem;
     position: fixed;
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 9999;
     opacity: 1;
   }
 
   .navbar.scroll {
     background: var(--menu-bg-color);
-    padding: 0.5rem 1rem;
     position: fixed;
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 9999;
     opacity: 1;
   }
 
