@@ -98,7 +98,6 @@
     letter-spacing: 0.3px;
     line-height: 2em;
     text-align: center;
-    vertical-align: middle;
   }
 
   .section-padding {
@@ -302,7 +301,6 @@
   .other-image {
     border-radius: var(--border-radius-small);
     box-shadow: 0px 15px 15px var(--primary-color);
-    vertical-align: middle;
   }
 
   .profile-list li {
