@@ -104,7 +104,15 @@
     font-weight: var(--font-weight-light);
     letter-spacing: 0.3px;
     line-height: 2em;
-    text-align: center;
+  }
+
+  pre {
+    font-family: var(--base-font-family);
+    color: var(--p-color);
+    font-size: var(--p-font-size);
+    font-weight: var(--font-weight-light);
+    letter-spacing: 0.3px;
+    line-height: 2em;
   }
 
   .section-padding {
@@ -122,10 +130,10 @@
 
   /* CUSTOM BUTTON */
   .custom-btn {
-    background: var(--dark-color);
+    background: var(--primary-color);
     border: none;
     border-radius: var(--border-radius-medium);
-    color: var(--white-color);
+    color: var(--dark-color);
     letter-spacing: 0.2px;
     padding: 6px 36px 10px 36px;
     font-size: var(--button-font-size);
@@ -134,8 +142,8 @@
 
   .custom-btn:hover,
   .custom-btn:focus {
-    color: var(--dark-color);
-    background: var(--primary-color);
+    color: var(--white-color);
+    background: var(--dark-color);
   }
 
 
