@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: BottomBar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,133 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: BottomBar.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from 'react';
+import './BottomBar.css';
+import Translate from './googleTranslate';
+import WeatherComponent from './weather';
+import TextToSpeech from './TextToSpeech';
+import { useZoom } from './ZoomContext';
 
+/**
+ * Represents the BottomBar component.
+ * @function
+ * @returns {JSX.Element} The JSX representation of the BottomBar.
+ */
+const BottomBar = () => {
+  /**
+   * State to track whether the accessibility popup is open.
+   * @type {[boolean, React.Dispatch&lt;React.SetStateAction&lt;boolean>>]}
+   */
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    <h3> </h3>
+  /**
+   * Text-to-Speech state and functions.
+   * @type {Object}
+   * @property {boolean} isToggled - Indicates whether Text-to-Speech is toggled on.
+   * @property {Function} handleToggle - Function to toggle Text-to-Speech.
+   */
+  const { isToggled, handleToggle } = TextToSpeech();
 
+  /**
+   * Zoom-related state and functions obtained from ZoomContext.
+   * @type {Object}
+   * @property {number} textSize - Current text size for zoom.
+   * @property {Function} setTextSize - Function to set the text size for zoom.
+   */
+  const { textSize, setTextSize } = useZoom();
 
+  /**
+   * Opens the accessibility popup and adds a CSS class to the body.
+   * @function
+   * @returns {void}
+   */
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    document.body.classList.add('popup-open');
+  };
 
+  /**
+   * Closes the accessibility popup and removes the CSS class from the body.
+   * @function
+   * @returns {void}
+   */
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    document.body.classList.remove('popup-open');
+  };
 
+  return (
+    &lt;>
+      &lt;footer>
+        &lt;div className="weather">
+          {/* Weather component */}
+          &lt;WeatherComponent />
+        &lt;/div>
+        &lt;div className="accessibility">
+          {/* Accessibility images with hover effect */}
+          &lt;div className="img-container">
+            &lt;img id='acc-img' src='Images/accessibility.png' alt='accessibility'>&lt;/img>
+            &lt;img id='acc-img-hov' src='Images/accessibility-hover.png' onClick={openPopup} alt='accessibility (hover)'>&lt;/img>
+          &lt;/div>
+        &lt;/div>
+        &lt;div className="translate">
+          {/* Translate component */}
+          &lt;Translate />
+        &lt;/div>
+      &lt;/footer>
 
+      {isPopupOpen &amp;&amp; (
+        // Accessibility Popup
+        &lt;div className="A-Popup">
+          &lt;div className="A-Popup-Content">
+            &lt;h2>Accessibility Options&lt;/h2>
+            &lt;br />
+            &lt;div className="zoomDiv">
+              &lt;h5>Zoom:&lt;/h5>
+              {/* Input range for zoom control */}
+              &lt;input
+                type="range"
+                min="0.9"
+                max="1.4"
+                step="0.1"
+                value={textSize}
+                onChange={(e) => {
+                  const newSize = parseFloat(e.target.value);
+                  setTextSize(newSize);
+                  localStorage.setItem('textSize', newSize.toString());
+                }}
+              />
+              &lt;span>{textSize.toFixed(1)}&lt;/span>
+            &lt;/div>
+            &lt;br />
+            &lt;div className="ttsButton">
+              {/* Button to toggle Text-to-Speech */}
+              &lt;button onClick={handleToggle}>
+                {isToggled ? 'Turn Off Text-to-Speech' : 'Turn On Text-to-Speech'}
+              &lt;/button>
+            &lt;/div>
+            {/* Button to close the accessibility popup */}
+            &lt;button onClick={closePopup}>Close&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      )}
+    &lt;/>
+  );
+};
 
-
-
-
-
-    
-
-
-
-
-
+export default BottomBar;
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ManagerPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ManagerPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import "./ManagerPage.css";
+
+/**
+ * View1 component represents the first view of the manager page.
+ * @param {Object} props - The properties passed to the component.
+ * @param {Function} props.runQuery - Function to run a database query.
+ * @param {Array} props.queryResultA - Result of the database query.
+ * @param {Function} props.openPopup - Function to open a popup.
+ * @param {Object} props.popupContent - Content to display in the popup.
+ * @param {Function} props.setPopupContent - Function to set the popup content.
+ * @param {Function} props.handleInputChange - Function to handle input changes.
+ * @param {Function} props.handleAutoRestockUpdate - Function to handle auto restock updates.
+ * @param {Function} props.handleDeleteIngredientUpdate - Function to handle ingredient deletion updates.
+ * @param {Function} props.handleUpdate - Function to handle updates.
+ * @param {Function} props.setNewIngredientInput - Function to set new ingredient input.
+ * @param {Object} props.newIngredientInput - Input for a new ingredient.
+ * @param {Function} props.handleCreateNewIngredient - Function to handle creating a new ingredient.
+ */
+const View1 = ({
+  runQuery,
+  queryResultA,
+  openPopup,
+  popupContent,
+  setPopupContent,
+  handleInputChange,
+  handleAutoRestockUpdate,
+  handleDeleteIngredientUpdate,
+  handleUpdate,
+  setNewIngredientInput,
+  newIngredientInput,
+  handleCreateNewIngredient,
+}) => {
+  /**
+  * useEffect to run the query when the component mounts.
+  */
+  useEffect(() => {
+    /**
+     * fetchData function to execute the database query.
+     */
+    const fetchData = async () => {
+      // Add your query here
+      await runQuery('SELECT * FROM ingredients');
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+
+  /**
+   * Render method for View1 component.
+   * @returns {JSX.Element} JSX representing the View1 component.
+   */
+  return (
+    &lt;div className="App">
+      &lt;h1>Inventory Data&lt;/h1>
+
+      {/* Add "Create New" button at the top */}
+      &lt;button className="create-new-button" onClick={() => openPopup({})}>
+        Create New
+      &lt;/button>
+
+      {/* Section for column titles */}
+      &lt;div className="column-titles">
+        &lt;div className="column">Name&lt;/div>
+        &lt;div className="column">Cost&lt;/div>
+        &lt;div className="column">Stock&lt;/div>
+        &lt;div className="column">MaxStock&lt;/div>
+        &lt;div className="column">Supplier&lt;/div>
+      &lt;/div>
+
+      {/* Render existing ingredients */}
+      {queryResultA.length > 0 ? (
+        &lt;ul className="item-list">
+          {queryResultA.map((row, rowIndex) => (
+            &lt;li key={rowIndex} className="list-item">
+              {/* Use a self-invoking function for console.log */}
+              {(() => {
+                return null; // This is needed because JSX expects an expression
+              })()}
+              &lt;div className={row.amountinstock === 0 ? 'red-box' : 'yellow-box'}>
+                &lt;div className="column-value">{row.ingredientname}&lt;/div>
+                &lt;div className="column-value">{row.ingredientcost}&lt;/div>
+                &lt;div className="column-value">{row.amountinstock}&lt;/div>
+                &lt;div className="column-value">{row.fullstockcount}&lt;/div>
+                &lt;div className="column-value">{row.supplier}&lt;/div>
+                &lt;button className="show-details-button" onClick={() => openPopup(row)}>
+                  Edit
+                &lt;/button>
+              &lt;/div>
+            &lt;/li>
+          ))}
+          &lt;br />&lt;br />&lt;br />&lt;br />&lt;br />
+        &lt;/ul>
+      ) : (
+        &lt;p>No query result found&lt;/p>
+      )}
+
+      {/* Popup to display detailed information or create a new ingredient */}
+      {popupContent &amp;&amp; (
+        &lt;div className="popup">
+          &lt;div className="popup-content">
+            {/* Render input fields for editing existing ingredient or creating a new one */}
+            {Object.entries(popupContent).map(([key, value], index) => (
+              &lt;div key={index}>
+                {index === 0 ? (
+                  // If index is 'Name', display the drink name as text without a header
+                  &lt;span>{value}&lt;/span>
+                ) : (
+                  // For other keys, display an input box with the corresponding header
+                  &lt;p>
+                    {displayNames[key]}:
+                    &lt;input type="text" value={value} onChange={(e) => handleInputChange(e, key)} />
+                  &lt;/p>
+                )}
+              &lt;/div>
+            ))}
+            {/* Render buttons based on whether it's an update or a new ingredient */}
+            {popupContent.ingredientname ? (
+              // Update Ingred Popup
+              &lt;>
+                &lt;button onClick={() => handleUpdate(popupContent)}>Update&lt;/button>
+                &lt;button onClick={() => handleAutoRestockUpdate(popupContent, 'View1')}>Auto Restock&lt;/button>
+                &lt;button onClick={() => handleDeleteIngredientUpdate(popupContent)}>Delete Ingredient&lt;/button>
+              &lt;/>
+            ) : (
+              // Add New Ingred Popup
+              &lt;>
+                &lt;h3>New Ingredient:&lt;/h3>
+                {Object.entries(newIngredientInput).map(([key, value], index) => (
+                  &lt;div key={index}>
+                    &lt;p>
+                      {displayNames[key]}:
+                      &lt;input
+                        type="text"
+                        value={value}
+                        onChange={(e) =>
+                          setNewIngredientInput((prevInput) => ({ ...prevInput, [key]: e.target.value }))
+                        }
+                      />
+                    &lt;/p>
+                  &lt;/div>
+                ))}
+                &lt;button onClick={handleCreateNewIngredient}>Save New Ingredient&lt;/button>
+              &lt;/>
+            )}
+            &lt;button onClick={() => setPopupContent(null)}>Close&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      )}
+    &lt;/div>
+  );
+};
+
+/**
+ * Represents display names for different properties.
+ * @type {Object.&lt;string, string>}
+ */
+const displayNames = {
+  ingredientname: 'Name',
+  ingredientcost: 'Cost ($)',
+  amountinstock: 'Stock (oz)',
+  fullstockcount: 'Max Stock (oz)',
+  supplier: 'Supplier',
+};
+
+/**
+ * Helper function to get column title based on the key.
+ * @param {string} key - The key for which to get the column title.
+ * @returns {string} - The column title.
+ */
+const getColumnTitle = (key) => {
+  switch (key) {
+    case 'ingredientname':
+      return 'Name';
+    case 'ingredientcost':
+      return 'Cost';
+    case 'amountinstock':
+      return 'Stock';
+    case 'fullstockcount':
+      return 'MaxStock';
+    case 'supplier':
+      return 'Supplier';
+    default:
+      return key; // Return the key as title if not recognized
+  }
+};
+
+/**
+ * Represents a React component for displaying drink data.
+ * @param {Object} props - The component's props.
+ * @param {Array} props.queryResultB - The result of the query for drink data.
+ * @param {Function} props.openPopupDrink - Function to open the drink popup.
+ * @param {Object} props.popupContent - Content of the drink popup.
+ * @param {Function} props.setPopupContent - Function to set the popup content.
+ * @param {Function} props.executedQuery - Function to execute a query.
+ * @param {boolean} props.showPopup - Boolean indicating whether the popup is visible.
+ * @param {number} props.drinkCost - The cost of the drink.
+ * @param {Array} props.selectedList - List of selected items.
+ * @param {Function} props.handleChipClick - Function to handle chip click.
+ * @param {Array} props.addonsList - List of addons.
+ * @param {Function} props.addDrinkToOrder - Function to add a drink to the order.
+ * @param {Function} props.closePopupDrink - Function to close the drink popup.
+ * @param {Function} props.handleDrinkUpdate - Function to handle drink update.
+ * @param {Function} props.runQuery - Function to run a query.
+ * @param {Object} props.newDrink - The new drink object.
+ * @param {boolean} props.isNewDrink - Boolean indicating whether it's a new drink.
+ * @param {Function} props.setisNewDrink - Function to set the new drink flag.
+ * @param {Function} props.handleCreateNewDrink - Function to handle the creation of a new drink.
+ * @param {Object} props.newDrinkNameAndPrice - Object containing the new drink's name and price.
+ * @param {Function} props.setnewDrinkNameAndPrice - Function to set the new drink's name and price.
+ * @param {Function} props.handleDeleteDrinkUpdate - Function to handle deleting a drink.
+ * @param {Function} props.handleInputChange - Function to handle input changes.
+ * @param {Function} props.setDrinkCost - Function to set the drink cost.
+ * @returns {JSX.Element} - The JSX element representing the component.
+ */
+const View2 = ({ 
+  queryResultB, 
+  openPopupDrink, 
+  popupContent, 
+  setPopupContent, 
+  executedQuery, 
+  showPopup, 
+  drinkCost, 
+  selectedList, 
+  handleChipClick, 
+  addonsList, 
+  addDrinkToOrder, 
+  closePopupDrink,
+  handleDrinkUpdate,
+  runQuery,
+  newDrink,
+  isNewDrink,
+  setisNewDrink,
+  handleCreateNewDrink,
+  newDrinkNameAndPrice,
+  setnewDrinkNameAndPrice,
+  handleDeleteDrinkUpdate,
+  handleInputChange,
+  setDrinkCost
+ }) => {
+
+  // Run the query when the component mounts
+  useEffect(() => {
+    /**
+     * Fetches data for ingredients and drinks.
+     * @async
+     */
+    const fetchData = async () => {
+      // Add your query here
+      await runQuery('SELECT * FROM ingredients');
+      await runQuery('SELECT * FROM drinks');
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+
+  return (
+  &lt;div className="App">
+    &lt;h1>Drink Data&lt;/h1>
+
+    {/* Use a self-invoking function for console.log */}
+    {(() => {
+              console.log("values of queryResultB:", queryResultB);
+              console.log("values of newDrink:", newDrink);
+              return null; // This is needed because JSX expects an expression
+            })()}
+
+
+  {/* Add "Create New" button at the top */}
+  &lt;button className="create-new-button" onClick={() => { openPopupDrink(newDrink); setisNewDrink(true)}}>
+    Create New
+  &lt;/button>
+
+
+
+    {queryResultB.length > 0 ? (
+      &lt;div className="grid-container">
+        {queryResultB.map((row, rowIndex) => (
+          &lt;div key={rowIndex} className="yellow-drink-box">
+            &lt;div>
+                &lt;p>{row.drinkname}&lt;/p>
+              &lt;/div>
+              &lt;div>
+                &lt;p>${row.drinkcost}&lt;/p>
+              &lt;/div>
+            
+            {/* Use a self-invoking function for console.log */}
+            {(() => {
+              console.log("row object:", row);
+              return null; // This is needed because JSX expects an expression
+            })()}
+
+            {/* Button to trigger the popup */}
+            &lt;div>
+              &lt;button onClick={() => openPopupDrink(row)}>Edit&lt;/button>
+            &lt;/div>
+          &lt;/div>
+        ))}
+        &lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />
+      &lt;/div>
+    ) : (
+      &lt;p>No query result found&lt;/p>
+    )}
+
+    {/* Popup for UPDATING DRINK */}
+    {showPopup &amp;&amp; popupContent &amp;&amp; (
+        &lt;div className="orderPopup">
+          &lt;div className="orderPopup-content">
+          &lt;div>
+              &lt;h2>{popupContent.drinkname}&lt;/h2>
+            &lt;/div>
+            &lt;br/>
+            &lt;div>
+              &lt;h3>
+              Price:
+              &lt;input
+                type="number"
+                step="0.01"  // You can adjust the step based on your precision requirements
+                value={drinkCost}
+                onChange={(e) => setDrinkCost(parseFloat(e.target.value))}
+              />
+              &lt;/h3>
+            &lt;/div>
+            &lt;br />
+            &lt;h3>Selected Ingredients:&lt;/h3>
+            &lt;div className="chip-list">
+              {selectedList.map((item) => (
+                &lt;div key={item} className="chip" onClick={() => handleChipClick(item)}>
+                  &lt;p className="chip-label">{item}&lt;/p>
+                &lt;/div>
+              ))}
+            &lt;/div>
+            &lt;br />
+            &lt;h3>Addons:&lt;/h3>
+            &lt;div className="chip-list">
+              {addonsList.map((item) => (
+                &lt;div key={item} className="chip" onClick={() => handleChipClick(item)}>
+                  &lt;p className="chip-label">{item}&lt;/p>
+                &lt;/div>
+              ))}
+            &lt;/div>
+            &lt;button onClick={() => handleDrinkUpdate(popupContent)}>Update&lt;/button>
+            &lt;button onClick={closePopupDrink}>Close&lt;/button>
+            &lt;button onClick={() => handleDeleteDrinkUpdate(popupContent)}>Delete Drink&lt;/button>
+
+          &lt;/div>
+        &lt;/div>
+      )
+    }
+
+    {/* Popup for NEW DRINK */}
+    {showPopup &amp;&amp; popupContent &amp;&amp; isNewDrink &amp;&amp; (
+        &lt;div className="orderPopup">
+          &lt;div className="orderPopup-content">
+          &lt;div>
+            &lt;/div>
+            &lt;div>
+              &lt;p>
+                &lt;h3>Name:
+                &lt;input
+                  type="text"
+                  placeholder="Type the name here"
+                  onChange={(e) => setnewDrinkNameAndPrice({ ...newDrinkNameAndPrice, name: e.target.value })}
+                />
+                &lt;/h3>
+                &lt;br>&lt;/br>
+                &lt;h3>Price:
+                &lt;input
+                  type="text"
+                  placeholder="Type the price here"
+                  onChange={(e) => setnewDrinkNameAndPrice({ ...newDrinkNameAndPrice, price: e.target.value })}
+                />
+                &lt;/h3>
+              &lt;/p>
+            &lt;/div>
+            &lt;br />
+
+              {/* Use a self-invoking function for console.log */}
+              {(() => {
+                console.log("Selected LIST:", selectedList);
+                return null; // This is needed because JSX expects an expression
+              })()}
+
+
+
+            &lt;h3>Selected Ingredients:&lt;/h3>
+            &lt;div className="chip-list">
+              {selectedList.map((item) => (
+                &lt;div key={item} className="chip" onClick={() => handleChipClick(item)}>
+                  &lt;p className="chip-label">{item}&lt;/p>
+                &lt;/div>
+              ))}
+            &lt;/div>
+            &lt;br />
+            &lt;h3>Remaining Ingredients:&lt;/h3>
+            &lt;div className="chip-list">
+              {addonsList.map((item) => (
+                &lt;div key={item} className="chip" onClick={() => handleChipClick(item)}>
+                  &lt;p className="chip-label">{item}&lt;/p>
+                &lt;/div>
+              ))}
+            &lt;/div>
+            &lt;button onClick={() => handleCreateNewDrink(popupContent)}>Update&lt;/button>
+            &lt;button onClick={closePopupDrink}>Close&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      )
+    }
+  &lt;/div>
+  );
+ };
+
+ /**
+ * React functional component representing a view for drink data.
+ *
+ * @param {Object} props - The component's props.
+ * @param {Function} props.runQuery - Function to execute a query.
+ * @param {Array} props.queryResultC - Result of the query for View3.
+ * @param {Function} props.openPopup - Function to open a popup.
+ * @param {Object} props.popupContent - Content to be displayed in the popup.
+ * @param {Function} props.setPopupContent - Function to set popup content.
+ * @param {Function} props.handleAutoRestockUpdate - Function to handle auto restock updates.
+ * @param {Object} props.executedQuery - The executed query.
+ * @returns {JSX.Element} The rendered React component.
+ */
+const View3 = ({ runQuery, queryResultC, openPopup, popupContent, setPopupContent, handleAutoRestockUpdate, executedQuery }) => {
+  // Run the query when the component mounts
+  useEffect(() => {
+    /**
+     * Function to fetch data for the component.
+     *
+     * @async
+     * @function
+     */
+    const fetchData = async () => {
+      // Add your query here
+      await runQuery('SELECT * FROM ingredients WHERE amountInStock * 5 &lt; fullStockCount');
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures that this effect runs once when the component mounts
+
+  return (
+    &lt;div className="App">
+      {/* The rest of your component logic */}
+      &lt;h1>Drink Data&lt;/h1>
+
+      {/* Section for column titles */}
+      &lt;div className="column-titles">
+        &lt;div className="column">Name&lt;/div>
+        &lt;div className="column">Cost&lt;/div>
+        &lt;div className="column">Stock&lt;/div>
+        &lt;div className="column">MaxStock&lt;/div>
+        &lt;div className="column">Supplier&lt;/div>
+      &lt;/div>
+
+      {/* Render ingredients which are low in stock */}
+      {queryResultC.length > 0 ? (
+        &lt;ul className="item-list">
+          {queryResultC.map((row, rowIndex) => (
+            &lt;li key={rowIndex} className="list-item">
+              {/* Use a self-invoking function for console.log */}
+              {(() => {
+                console.log("Row.ingredient is: ", row.ingredientname);
+                return null; // This is needed because JSX expects an expression
+              })()}
+              &lt;div className={row.amountinstock === 0 ? 'red-box' : `yellow-box`}>
+                &lt;div className="column-value">{row.ingredientname}&lt;/div>
+                &lt;div className="column-value">{row.ingredientcost}&lt;/div>
+                &lt;div className="column-value">{row.amountinstock}&lt;/div>
+                &lt;div className="column-value">{row.fullstockcount}&lt;/div>
+                &lt;div className="column-value">{row.supplier}&lt;/div>
+                &lt;button className="show-details-button" onClick={() => handleAutoRestockUpdate(row, 'View3')}>Restock&lt;/button>
+              &lt;/div>
+            &lt;/li>
+          ))}
+        &lt;/ul>
+      ) : (
+        &lt;p>No query result found&lt;/p>
+      )}
+
+      {/* Popup to display detailed information */}
+      {popupContent &amp;&amp; (
+        &lt;div className="popup">
+          &lt;div className="popup-content">
+            {Object.entries(popupContent).map(([key, value], index) => (
+              &lt;div key={index}>
+                &lt;p>
+                  {key}: {value}
+                &lt;/p>
+              &lt;/div>
+            ))}
+            &lt;button onClick={() => setPopupContent(null)}>Close&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      )}
+    &lt;/div>
+  );
+};
+
+/**
+ * React functional component representing View4.
+ *
+ * @param {Object} props - The component's props.
+ * @param {Array} props.queryResultA - Result of the query for View4.
+ * @param {Function} props.openPopup - Function to open a popup.
+ * @returns {JSX.Element} The rendered React component.
+ */
+const View4 = ({ queryResultA, openPopup }) => (
+  &lt;div>
+    &lt;h1>Data Report&lt;/h1>
+    {/* Rendering logic for View 4 */}
+    {/* ... */}
+  &lt;/div>
+);
+
+/**
+ * Represents the ManagerPage component.
+ * @function
+ * @name ManagerPage
+ */
+function ManagerPage() {
+  /**
+   * State variable for the result of query A.
+   * @type {Array}
+   * @name queryResultA
+   */
+  const [queryResultA, setQueryResultA] = useState([]);
+  /**
+   * State variable for the result of query B.
+   * @type {Array}
+   * @name queryResultB
+   */
+  const [queryResultB, setQueryResultB] = useState([]);
+  /**
+   * State variable for the result of query C.
+   * @type {Array}
+   * @name queryResultC
+   */
+  const [queryResultC, setQueryResultC] = useState([]);
+  /**
+   * State variable for the content of the popup.
+   * @type {Object | null}
+   * @name popupContent
+   */
+  const [popupContent, setPopupContent] = useState(null);
+  /**
+   * State variable for the executed query.
+   * @type {Object}
+   * @name executedQuery
+   */
+  const [executedQuery, setExecutedQuery] = useState({});
+  /**
+   * State variable for the input value.
+   * @type {string}
+   * @name inputValue
+   */
+  const [inputValue, setInputValue] = useState('');
+  /**
+   * State variable for the current view.
+   * @type {string}
+   * @name currentView
+   */
+  const [currentView, setCurrentView] = useState("view1"); // Default view
+
+  // Added for drink data page to work
+  /**
+   * State variable for the list of drinks.
+   * @type {Array}
+   * @name drinks
+   */
+  const [drinks, setDrinks] = useState([]);
+  /**
+   * State variable for the current order.
+   * @type {Array}
+   * @name currentOrder
+   */
+  const [currentOrder, setCurrentOrder] = useState([]);
+  /**
+   * State variable to control the visibility of the popup.
+   * @type {boolean}
+   * @name showPopup
+   */
+  const [showPopup, setShowPopup] = useState(false);
+  /**
+   * State variable for the list of ingredients.
+   * @type {Array}
+   * @name ingredients
+   */
+  const [ingredients, setIngredients] = useState([]);
+  /**
+   * State variable for the selected list of ingredients.
+   * @type {Array}
+   * @name selectedList
+   */
+  const [selectedList, setSelectedList] = useState([]);
+  /**
+   * State variable for the list of addon ingredients.
+   * @type {Array}
+   * @name addonsList
+   */
+  const [addonsList, setAddonsList] = useState([]);
+  /**
+   * State variable for the list of added ingredients.
+   * @type {Array}
+   * @name addedList
+   */
+  const [addedList, setAddedList] = useState([]);
+  /**
+   * State variable for the list of ingredients in a drink.
+   * @type {Array}
+   * @name drinkIngredients
+   */
+  const [drinkIngredients, setDrinkIngredients] = useState([]);
+  /**
+   * State variable for the cost of a drink.
+   * @type {number}
+   * @name drinkCost
+   */
+  const [drinkCost, setDrinkCost] = useState(0.00);
+  /**
+   * State variable for the total cost.
+   * @type {number}
+   * @name totalCost
+   */
+  const [totalCost, setTotalCost] = useState(0.00);
+  /**
+   * State variable for the index of the item being edited.
+   * @type {number}
+   * @name editIndex
+   */
+  const [editIndex, setEditIndex] = useState(-1);
+  /**
+   * State variable for a new drink.
+   * @type {Object}
+   * @name newDrink
+   */
+  const [newDrink, setnewDrink] = useState({drinkcost:0, drinkname: '', ingredients:''});
+  /**
+   * State variable to indicate whether it is a new drink.
+   * @type {boolean}
+   * @name isNewDrink
+   */
+  const [isNewDrink, setisNewDrink] = useState(false);
+  /**
+   * State variable for the name and price of a new drink.
+   * @type {Object}
+   * @name newDrinkNameAndPrice
+   */
+  const [newDrinkNameAndPrice, setnewDrinkNameAndPrice] = useState({name: '', price:0})
+
+  
+
+  /**
+   * Function to handle displaying popup content.
+   * @function
+   * @name openPopup
+   * @param {Object} content - The content to be displayed in the popup.
+   */
+  const openPopup = (content) => {
+    // If content is provided, set the popup content; otherwise, initialize for a new ingredient
+    setPopupContent(content ? content : {});
+    // If content is not provided, reset the input values for a new ingredient
+    if (!content) {
+      setNewIngredientInput({
+        ingredientname: "",
+        ingredientcost: "",
+        amountinstock: "",
+        fullstockcount: "",
+        supplier: "",
+      });
+    }
+  };
+
+  /**
+   * Function to handle displaying popup content for drinks.
+   * @function
+   * @name openPopupDrink
+   * @param {Object} content - The content to be displayed in the drink popup.
+   */
+  const openPopupDrink = (content) => {
+    setPopupContent(content);
+    const di = content.ingredients.split('-').map(item => item.trim());
+    setDrinkCost(parseFloat(content.drinkcost));
+    setDrinkIngredients(di);
+    setSelectedList(di);
+    const addOns = ingredients.filter(ingredient => !di.includes(ingredient.ingredientname))
+    setAddonsList(addOns.map(addon => addon.ingredientname));
+    setAddedList([]);
+    setShowPopup(true);
+  };
+
+  /**
+   * Function to close the drink popup without adding to the order.
+   * @function
+   * @name closePopupDrink
+   */// Function to close the popup without adding to order
+  const closePopupDrink = () => {
+    setisNewDrink(false);
+    setShowPopup(false);
+  };
+
+  /**
+   * Function to handle moving a chip between selectedList and addonsList.
+   * @function
+   * @name handleChipClick
+   * @param {string} item - The chip item to be moved.
+   */
+  const handleChipClick = (item) => {
+    if (selectedList.includes(item)) {
+      setSelectedList(selectedList.filter((selectedItem) => selectedItem !== item));
+      setAddonsList([...addonsList, item]);
+      if (!drinkIngredients.includes(item)) {
+        setAddedList(addedList.filter((addedItem) => addedItem !== item));
+        const removedIngredient = ingredients.find(ingredient => ingredient.ingredientname === item);
+        const cost = drinkCost - parseFloat(removedIngredient.ingredientcost);
+        setDrinkCost(parseFloat(cost.toFixed(2)));
+      }
+    } else if (addonsList.includes(item)) {
+      setAddonsList(addonsList.filter((addonItem) => addonItem !== item));
+      setSelectedList([...selectedList, item]);
+      if (!drinkIngredients.includes(item)) {
+        setAddedList([...addedList, item]);
+        const addedIngredient = ingredients.find(ingredient => ingredient.ingredientname === item);
+        const cost = drinkCost + parseFloat(addedIngredient.ingredientcost);
+        setDrinkCost(parseFloat(cost.toFixed(2)));
+      }
+    }
+  };
+
+  /**
+   * Function to handle input change for popup content.
+   * @function
+   * @name handleInputChange
+   * @param {Object} event - The input change event.
+   * @param {string} key - The key to be updated in the popup content.
+   */
+  const handleInputChange = (event, key) => {
+    const updatedPopupContent = { ...popupContent, [key]: event.target.value };
+    setPopupContent(updatedPopupContent);
+  };
+
+  /**
+   * Function to handle updating a drink.
+   * @async
+   * @function
+   * @name handleDrinkUpdate
+   * @param {Object} drink - The drink object to be updated.
+   */
+  const handleDrinkUpdate = async (drink) => {
+    // Update internal lists to match checkboxes
+    const removedList = drinkIngredients.filter(ingredient => addonsList.includes(ingredient)).map(ingredient => ingredient);
+    const updatedDrink = {
+      ...drink,
+      addedList: addedList.slice(),
+      removedList: removedList.slice(),
+      totalDrinkCost: drinkCost
+    };
+
+    // Add new ingredients to the updatedDrink.ingredients string
+    const updatedIngredients = [...drink.ingredients.split('-'), ...addedList].join('-');
+    updatedDrink.ingredients = updatedIngredients;
+
+    // Remove ingredients from updatedDrink.ingredients
+    const updatedIngredientsArray = updatedDrink.ingredients.split('-');
+    updatedDrink.removedList.forEach((removedIngredient) => {
+      const index = updatedIngredientsArray.indexOf(removedIngredient);
+      if (index !== -1) {
+        updatedIngredientsArray.splice(index, 1);
+      }});
+    updatedDrink.ingredients = updatedIngredientsArray.join('-');
+
+    console.log('updatedDrink in handleDrinkUpdate() fcn is:', updatedDrink);
+
+    
+    // SQL update Drink (update its ingredients, cost, etc).. to match the new updatedDrink object
+    try {
+      const nme = updatedDrink.drinkname;
+      const cst = drinkCost;
+      const ingreds = updatedDrink.ingredients;
+
+      console.log("nme =", nme);
+      console.log("cst =", cst);
+      console.log("ingreds =", ingreds);
+
+
+      const updateDrinkQuery = `
+      UPDATE drinks
+      SET drinkname = '${nme}',
+          ingredients = '${ingreds}',
+          drinkcost = '${cst}'
+      WHERE drinkname = '${nme}';
+    `;
+      
+      console.log("updateDrinksQuery string:", updateDrinkQuery)
+
+      await runQuery(updateDrinkQuery);
+      
+      // After updating, refresh the ingredients data
+      await runQuery('SELECT * FROM ingredients');
+      await runQuery('SELECT * FROM drinks');
+
+      // Re-render Ingredients Page (View1)
+      setPopupContent(null)
+      return &lt;View2 runQuery={runQuery} queryResultB={queryResultB} openPopupDrink={openPopupDrink} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} executedQuery={executedQuery[currentView]} showPopup={showPopup} drinkCost={drinkCost} selectedList={selectedList} handleChipClick={handleChipClick} addonsList={addonsList} closePopupDrink={closePopupDrink} handleDrinkUpdate={handleDrinkUpdate} newDrink={newDrink} isNewDrink={isNewDrink} setisNewDrink={setisNewDrink} handleCreateNewDrink={handleCreateNewDrink} newDrinkNameAndPrice={newDrinkNameAndPrice} setnewDrinkNameAndPrice={setnewDrinkNameAndPrice} handleDeleteDrinkUpdate={handleDeleteDrinkUpdate} setDrinkCost={setDrinkCost}  />;
+
+    } catch (error) {
+      console.error('Error handling Drink Update:', error);
+    }
+    
+    setShowPopup(false); // Close the popup after adding to order
+  };
+
+  /**
+ * Handles the update of ingredient information in the SQL database.
+ * @async
+ * @param {Object} updatedValues - The updated values for the ingredient.
+ * @returns {ReactElement} - Returns a React element to re-render the Ingredients Page (View1).
+ */
+  const handleUpdate = async (updatedValues) => {  // When 'Update' button pressed
+    // Assuming you have a function to send the SQL query to the server
+    // sendUpdateQueryToDatabase(inputValue);
+    // ! ADD query logic here to update SQL database
+    console.log("updatedValues:", updatedValues)
+    if(updatedValues){
+      
+      try {
+        const nme = Object.entries(updatedValues)[0][1];
+        const cst = Object.entries(updatedValues)[1][1];
+        const curStck = Object.entries(updatedValues)[2][1];
+        const maxStck = Object.entries(updatedValues)[3][1];
+        const spplr = Object.entries(updatedValues)[4][1];
+
+        /**
+       * SQL query string to update ingredient information.
+       * @type {string}
+       */
+        const updateIngredientQuery = `
+        UPDATE ingredients
+        SET ingredientcost = '${cst}',
+            amountinstock = ${curStck},
+            fullstockcount = '${maxStck}',
+            supplier = '${spplr}'
+        WHERE ingredientname = '${nme}';
+      `;
+        
+        console.log("updateIngredientsQuery string:", updateIngredientQuery)
+
+        await runQuery(updateIngredientQuery);
+        
+        // After updating, refresh the ingredients data
+        await runQuery('SELECT * FROM ingredients');
+
+        // Re-render Ingredients Page (View1)
+        setPopupContent(null)
+        return &lt;View1 runQuery={runQuery} queryResultA={queryResultA} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+    }
+  };
+
+  /**
+ * Handles the auto restock update of ingredient information in the SQL database.
+ * @async
+ * @param {Object} updatedValues - The updated values for the ingredient.
+ * @param {string} whichView - The view to determine the SQL query execution.
+ * @returns {ReactElement} - Returns a React element to re-render the specified view.
+ */
+  const handleAutoRestockUpdate = async (updatedValues, whichView) => {
+    if(updatedValues){
+      
+      try {
+        const nme = Object.entries(updatedValues)[0][1];
+        const cst = Object.entries(updatedValues)[1][1];
+        const curStck = Object.entries(updatedValues)[3][1];  //! THIS IS THE SPECIAL PART (set cur stock to max amt)
+        const maxStck = Object.entries(updatedValues)[3][1];
+        const spplr = Object.entries(updatedValues)[4][1];
+
+        /**
+       * SQL query string to update ingredient information for auto restock.
+       * @type {string}
+       */
+        const updateIngredientQuery = `
+        UPDATE ingredients
+        SET ingredientcost = '${cst}',
+            amountinstock = ${curStck},
+            fullstockcount = '${maxStck}',
+            supplier = '${spplr}'
+        WHERE ingredientname = '${nme}';
+      `;
+        
+        console.log("updateIngredientsQuery string:", updateIngredientQuery)
+
+        await runQuery(updateIngredientQuery);
+        
+        if(whichView === 'View3'){
+          // After updating, refresh the ingredients data
+          await runQuery('SELECT * FROM ingredients WHERE amountInStock * 5 &lt; fullStockCount');
+
+          // Re-render Ingredients Page (View1)
+          setPopupContent(null)
+          return &lt;View3 runQuery={runQuery} queryResultC={queryResultC} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+        }
+        
+        // After updating, refresh the ingredients data
+        await runQuery('SELECT * FROM ingredients');
+
+        // Re-render Ingredients Page (View1)
+        setPopupContent(null)
+        return &lt;View1 runQuery={runQuery} queryResultA={queryResultA} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+    }
+  };
+
+  /**
+ * Handles the update for deleting an ingredient from the SQL database.
+ * @async
+ * @param {Object} updatedValues - The updated values for the ingredient to be deleted.
+ * @returns {ReactElement} - Returns a React element to re-render the Ingredients Page (View1).
+ */
+  const handleDeleteIngredientUpdate = async (updatedValues) => {
+    if(updatedValues){
+      
+      try {
+        const nme = Object.entries(updatedValues)[0][1];
+        /**
+       * SQL query string to delete an ingredient.
+       * @type {string}
+       */
+        const updateIngredientQuery = `DELETE FROM ingredients WHERE ingredientname = '${nme}';`;
+        
+        console.log("updateIngredientsQuery string:", updateIngredientQuery)
+
+        await runQuery(updateIngredientQuery);
+        
+        // After updating, refresh the ingredients data
+        await runQuery('SELECT * FROM ingredients');
+
+        // Re-render Ingredients Page (View1)
+        setPopupContent(null)
+        return &lt;View1 runQuery={runQuery} queryResultA={queryResultA} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+    }
+  };
+
+  /**
+ * Handles the update for deleting a drink from the SQL database.
+ * @async
+ * @param {Object} updatedValues - The updated values for the drink to be deleted.
+ * @returns {ReactElement} - Returns a React element to re-render the Ingredients Page (View1).
+ */
+  const handleDeleteDrinkUpdate = async (updatedValues) => {
+    if(updatedValues){
+      
+      try {
+        const nme = updatedValues.drinkname;
+        console.log("drink name HERE HERE is:", nme);
+        /**
+       * SQL query string to delete a drink.
+       * @type {string}
+       */
+        const updateIngredientQuery = `DELETE FROM drinks WHERE drinkname = '${nme}';`;
+        
+        console.log("updateIngredientsQuery string:", updateIngredientQuery)
+
+        await runQuery(updateIngredientQuery);
+        
+        // After updating, refresh the ingredients data
+        await runQuery('SELECT * FROM ingredients');
+        await runQuery('SELECT * FROM drinks');
+
+        // Re-render Ingredients Page (View1)
+        setPopupContent(null)
+        return &lt;View1 runQuery={runQuery} queryResultA={queryResultA} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+    }
+  };
+
+  
+  /**
+ * Represents a React component managing state for creating new ingredients.
+ * @typedef {Object} IngredientState
+ * @property {string} ingredientname - The name of the ingredient.
+ * @property {string} ingredientcost - The cost of the ingredient.
+ * @property {string} amountinstock - The amount of the ingredient in stock.
+ * @property {string} fullstockcount - The full stock count of the ingredient.
+ * @property {string} supplier - The supplier of the ingredient.
+ */
+  const [newIngredientInput, setNewIngredientInput] = useState({
+    ingredientname: "",
+    ingredientcost: "",
+    amountinstock: "",
+    fullstockcount: "",
+    supplier: "",
+  });
+
+  /**
+ * Handles the creation of a new ingredient.
+ * @async
+ * @function
+ * @returns {void}
+ */
+  const handleCreateNewIngredient = async () => {
+    try {
+      const { ingredientname, ingredientcost, amountinstock, fullstockcount, supplier } = newIngredientInput;
+  
+      const createIngredientQuery = `
+        INSERT INTO ingredients (ingredientname, ingredientcost, amountinstock, fullstockcount, supplier)
+        VALUES ('${ingredientname}', '${ingredientcost}', ${amountinstock}, '${fullstockcount}', '${supplier}');
+      `;
+  
+      console.log("createIngredientQuery string:", createIngredientQuery);
+  
+      await runQuery(createIngredientQuery);
+  
+      // After creating, refresh the ingredients data
+      await runQuery('SELECT * FROM ingredients');
+  
+      // Close the popup and reset the new ingredient input values
+      setPopupContent(null);
+      setNewIngredientInput({
+        ingredientname: "",
+        ingredientcost: "",
+        amountinstock: "",
+        fullstockcount: "",
+        supplier: "",
+      });
+    } catch (error) {
+      console.error('Error creating new ingredient:', error);
+    }
+  };
+
+  /**
+ * Handles the creation or update of a new drink.
+ * @async
+ * @function
+ * @param {Object} drink - The drink object.
+ * @returns {void}
+ */
+  const handleCreateNewDrink = async (drink) => {
+    // Update internal lists to match checkboxes
+    const removedList = drinkIngredients.filter(ingredient => addonsList.includes(ingredient)).map(ingredient => ingredient);
+    const updatedDrink = {
+      ...drink,
+      addedList: addedList.slice(),
+      removedList: removedList.slice(),
+      totalDrinkCost: drinkCost
+    };
+
+    // Add new ingredients to the updatedDrink.ingredients string
+    const updatedIngredients = [...drink.ingredients.split('-'), ...addedList].join('-');
+    updatedDrink.ingredients = updatedIngredients;
+
+    // Remove ingredients from updatedDrink.ingredients
+    const updatedIngredientsArray = updatedDrink.ingredients.split('-');
+    updatedDrink.removedList.forEach((removedIngredient) => {
+      const index = updatedIngredientsArray.indexOf(removedIngredient);
+      if (index !== -1) {
+        updatedIngredientsArray.splice(index, 1);
+      }});
+    updatedDrink.ingredients = updatedIngredientsArray.join('-');
+
+    console.log('updatedDrink in handleDrinkUpdate() fcn is:', updatedDrink);
+    
+    
+    try {
+      const nme = newDrinkNameAndPrice.name;
+      const cst = newDrinkNameAndPrice.price;
+      const ingreds = updatedDrink.ingredients;
+      const cals = Math.floor(Math.random() * (350 - 150 + 1)) + 150;
+
+      console.log("nme =", nme);
+      console.log("cst =", cst);
+      console.log("ingreds =", ingreds);
+
+
+      const updateDrinkQuery = `
+      INSERT INTO drinks (drinkname, ingredients, drinkcost, calories)
+      VALUES ('${nme}', '${ingreds}', '${cst}', '${cals}');`
+      
+      console.log("updateDrinksQuery string:", updateDrinkQuery)
+
+      await runQuery(updateDrinkQuery);
+      
+      // After updating, refresh the ingredients data
+      await runQuery('SELECT * FROM ingredients');
+      await runQuery('SELECT * FROM drinks');
+      
+      // ! FIX THIS FOR DRINKS (if needed)
+      // ! Reset bool for if its a new drink
+      // setNewIngredientInput({
+      //   ingredientname: "",
+      //   ingredientcost: "",
+      //   amountinstock: "",
+      //   fullstockcount: "",
+      //   supplier: "",
+      // });
+
+      setisNewDrink(false);
+
+      // Re-render Ingredients Page (View1)
+      setPopupContent(null)
+      return &lt;View2 runQuery={runQuery} queryResultB={queryResultB} openPopupDrink={openPopupDrink} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} executedQuery={executedQuery[currentView]} showPopup={showPopup} drinkCost={drinkCost} selectedList={selectedList} handleChipClick={handleChipClick} addonsList={addonsList} closePopupDrink={closePopupDrink} handleDrinkUpdate={handleDrinkUpdate} newDrink={newDrink} isNewDrink={isNewDrink} setisNewDrink={setisNewDrink} handleCreateNewDrink={handleCreateNewDrink} newDrinkNameAndPrice={newDrinkNameAndPrice} setnewDrinkNameAndPrice={setnewDrinkNameAndPrice} handleDeleteDrinkUpdate={handleDeleteDrinkUpdate} setDrinkCost={setDrinkCost} />;
+
+    } catch (error) {
+      console.error('Error creating new drink:', error);
+    }
+
+    setShowPopup(false); // Close the popup after creating new drink
+  };
+
+
+
+
+  /**
+ * This function runs a query on the server.
+ *
+ * @async
+ * @function
+ * @param {string} query - The SQL query to be executed on the server.
+ * @returns {Promise&lt;void>} - A Promise that resolves when the query is completed.
+ */
+  const runQuery = async (query) => {
+    try {
+      const response = await fetch(`https://tiger-sugar-backend.onrender.com/run-query?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      
+      if(query === 'SELECT * FROM ingredients'){
+        setQueryResultA(data.result);
+        setIngredients(data.result)
+      }
+      else if(query === 'SELECT * FROM drinks'){
+        setQueryResultB(data.result);
+        setDrinks(data.result);
+      }
+      else if(query === 'SELECT * FROM ingredients WHERE amountInStock * 5 &lt; fullStockCount'){
+        setQueryResultC(data.result);
+      }
+      else{
+        // setQueryResultA(data.result); // Hopefully we never reach here
+      }
+      
+    } catch (error) {
+      console.error('Error running query:', error);
+    }
+  };
+
+  /**
+ * Run a query when the component is mounted or when the view changes.
+ *
+ * @function
+ * @param {string} currentView - The current view.
+ * @param {Object} executedQuery - An object representing whether a query has been executed for each view.
+ * @returns {void}
+ */
+  useEffect(() => {
+    if (!executedQuery[currentView]) {
+      // Query has not been executed for the current view
+      switch (currentView) {
+        case "view1":
+          runQuery('SELECT * FROM ingredients');
+          break;
+        case "view2":
+          runQuery('SELECT * FROM ingredients');  
+          runQuery('SELECT * FROM drinks');
+          break;
+        case "view3":
+          runQuery('SELECT * FROM ingredients WHERE amountInStock * 5 &lt; fullStockCount');
+          break;
+        // Add cases for other views as needed
+        default:
+          break;
+      }
+      // Mark the query as executed for the current view
+      setExecutedQuery((prevExecutedQuery) => ({ ...prevExecutedQuery, [currentView]: true }));
+    }
+  }, [currentView, executedQuery]);
+
+  /**
+ * Render the current view based on the state.
+ *
+ * @function
+ * @returns {JSX.Element | null} - The JSX representing the current view or null if the view is not recognized.
+ */
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case "view1":
+        console.log("We entered view1 (debug statement)")
+        return &lt;View1 runQuery={runQuery} queryResultA={queryResultA} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} handleDeleteIngredientUpdate={handleDeleteIngredientUpdate} handleCreateNewIngredient={handleCreateNewIngredient} setNewIngredientInput={setNewIngredientInput} newIngredientInput={newIngredientInput} executedQuery={executedQuery[currentView]}/>;
+      case "view2":
+        return &lt;View2 runQuery={runQuery} queryResultB={queryResultB} openPopupDrink={openPopupDrink} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} executedQuery={executedQuery[currentView]} showPopup={showPopup} drinkCost={drinkCost} selectedList={selectedList} handleChipClick={handleChipClick} addonsList={addonsList} closePopupDrink={closePopupDrink} handleDrinkUpdate={handleDrinkUpdate} newDrink={newDrink} isNewDrink={isNewDrink} setisNewDrink={setisNewDrink} handleCreateNewDrink={handleCreateNewDrink} newDrinkNameAndPrice={newDrinkNameAndPrice} setnewDrinkNameAndPrice={setnewDrinkNameAndPrice} handleDeleteDrinkUpdate={handleDeleteDrinkUpdate} setDrinkCost={setDrinkCost} />;
+      case "view3":
+        return &lt;View3 runQuery={runQuery} queryResultC={queryResultC} openPopup={openPopup} popupContent={popupContent} setPopupContent={setPopupContent} handleInputChange={handleInputChange} handleUpdate={handleUpdate} handleAutoRestockUpdate={handleAutoRestockUpdate} executedQuery={executedQuery[currentView]} />;
+      case "view4":
+        return &lt;View4 queryResultA={queryResultA} openPopup={openPopup} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    &lt;div className="App">
+      &lt;h1>Manager View&lt;/h1>
+
+      {/* Add buttons or links to toggle between views */}
+      &lt;div className="button-container">
+        &lt;button onClick={() => setCurrentView("view1")}>Inventory Data&lt;/button>
+        &lt;button onClick={() => setCurrentView("view2")}>Drink Data&lt;/button>
+        &lt;button onClick={() => setCurrentView("view3")}>Restock Report&lt;/button>
+        &lt;button onClick={() => setCurrentView("view4")}>Data Report&lt;/button>
+      &lt;/div>
+
+      {/* Render the current view */}
+      {queryResultA.length > 0 ? renderCurrentView() : &lt;p>No query result found&lt;/p>/* !FIX THIS from QueryA for code safety */}  
+    &lt;/div>
+  );
+}
+
+export default ManagerPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#BottomBar">BottomBar</a></li><li><a href="global.html#CashierPage">CashierPage</a></li><li><a href="global.html#CustomerPage">CustomerPage</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#ManagerPage">ManagerPage</a></li><li><a href="global.html#MenuPage">MenuPage</a></li><li><a href="global.html#NavBar">NavBar</a></li><li><a href="global.html#TextToSpeech">TextToSpeech</a></li><li><a href="global.html#Translate">Translate</a></li><li><a href="global.html#View1">View1</a></li><li><a href="global.html#View2">View2</a></li><li><a href="global.html#View3">View3</a></li><li><a href="global.html#View4">View4</a></li><li><a href="global.html#WeatherComponent">WeatherComponent</a></li><li><a href="global.html#ZoomContext">ZoomContext</a></li><li><a href="global.html#ZoomProvider">ZoomProvider</a></li><li><a href="global.html#addDrinkToOrder">addDrinkToOrder</a></li><li><a href="global.html#addedList">addedList</a></li><li><a href="global.html#addonsList">addonsList</a></li><li><a href="global.html#clientId">clientId</a></li><li><a href="global.html#closePopup">closePopup</a></li><li><a href="global.html#closePopupDrink">closePopupDrink</a></li><li><a href="global.html#currentOrder">currentOrder</a></li><li><a href="global.html#currentView">currentView</a></li><li><a href="global.html#displayNames">displayNames</a></li><li><a href="global.html#drinkCost">drinkCost</a></li><li><a href="global.html#drinkInfo">drinkInfo</a></li><li><a href="global.html#drinkIngredients">drinkIngredients</a></li><li><a href="global.html#drinkNames">drinkNames</a></li><li><a href="global.html#drinks">drinks</a></li><li><a href="global.html#editDrink">editDrink</a></li><li><a href="global.html#editIndex">editIndex</a></li><li><a href="global.html#executedQuery">executedQuery</a></li><li><a href="global.html#formatIngredient">formatIngredient</a></li><li><a href="global.html#getColumnTitle">getColumnTitle</a></li><li><a href="global.html#getWeatherData">getWeatherData</a></li><li><a href="global.html#handleCheckout">handleCheckout</a></li><li><a href="global.html#handleChipClick">handleChipClick</a></li><li><a href="global.html#handleDrinkUpdate">handleDrinkUpdate</a></li><li><a href="global.html#handleInputChange">handleInputChange</a></li><li><a href="global.html#ingredients">ingredients</a></li><li><a href="global.html#inputValue">inputValue</a></li><li><a href="global.html#isNewDrink">isNewDrink</a></li><li><a href="global.html#newDrink">newDrink</a></li><li><a href="global.html#newDrinkNameAndPrice">newDrinkNameAndPrice</a></li><li><a href="global.html#openPopup">openPopup</a></li><li><a href="global.html#openPopupDrink">openPopupDrink</a></li><li><a href="global.html#popupContent">popupContent</a></li><li><a href="global.html#queryResultA">queryResultA</a></li><li><a href="global.html#queryResultB">queryResultB</a></li><li><a href="global.html#queryResultC">queryResultC</a></li><li><a href="global.html#removeDrinkFromOrder">removeDrinkFromOrder</a></li><li><a href="global.html#runQuery">runQuery</a></li><li><a href="global.html#selectedList">selectedList</a></li><li><a href="global.html#showPopup">showPopup</a></li><li><a href="global.html#totalCost">totalCost</a></li><li><a href="global.html#useEffect">useEffect</a></li><li><a href="global.html#useZoom">useZoom</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 23:46:12 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

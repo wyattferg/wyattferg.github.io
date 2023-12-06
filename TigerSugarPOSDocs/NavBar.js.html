@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: NavBar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,62 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: NavBar.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Outlet, Link } from "react-router-dom";
+import './NavBar.css';
 
+/**
+ * Functional component representing the navigation bar of the application.
+ * It includes links to different pages such as the home page, menu page, customer page, and employee login page.
+ * @component
+ * @returns {JSX.Element} The JSX representation of the navigation bar.
+ */
+const NavBar = () => {
+  return (
+    &lt;>
+      {/* Navigation Bar */}
+      &lt;nav>
+        &lt;ul>
+          {/* Home Link */}
+          &lt;li>
+            &lt;Link to="/">Tiger Sugar&lt;/Link>
+          &lt;/li>
 
-    <h3> </h3>
+          {/* Menu Link */}
+          &lt;li>
+            &lt;Link to="/MenuPage">Menu&lt;/Link>
+          &lt;/li>
 
+          {/* Customer Link */}
+          &lt;li>
+            &lt;Link to="/CustomerPage">Customer&lt;/Link>
+          &lt;/li>
 
+          {/* Employee Login Link */}
+          &lt;li>
+            &lt;Link to="/LoginPage">Employee Login&lt;/Link>
+          &lt;/li>
+        &lt;/ul>
+      &lt;/nav>
 
+      {/* Router Outlet for rendering nested routes */}
+      &lt;Outlet />
+    &lt;/>
+  )
+};
 
-
-
-
-
-
-
-    
-
-
-
-
-
+export default NavBar;
+</code></pre>
+        </article>
+    </section>
 
 
 

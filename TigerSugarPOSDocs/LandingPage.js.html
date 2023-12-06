@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: LandingPage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,54 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: LandingPage.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Link } from "react-router-dom";
+import './LandingPage.css';
 
+/**
+ * React component representing the landing page of the application.
+ * This component displays navigation links to other pages.
+ * @function
+ * @returns {JSX.Element} The JSX element representing the LandingPage component.
+ */
+const LandingPage = () => {
+  return (
+    &lt;>
+      {/* LandingPage container */}
+      &lt;div className="LandingPage">
+        {/* Navigation links */}
+        &lt;ul>
+          {/* Menu link */}
+          &lt;li>
+            &lt;Link to="/MenuPage">Menu&lt;/Link>
+          &lt;/li>
+          {/* Customer link */}
+          &lt;li>
+            &lt;Link to="/CustomerPage">Customer&lt;/Link>
+          &lt;/li>
+          {/* Employee Login link */}
+          &lt;li>
+            &lt;Link to="/LoginPage">Employee Login&lt;/Link>
+          &lt;/li>
+        &lt;/ul>
+      &lt;/div>
+    &lt;/>
+  );
+};
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+// Exporting the LandingPage component as the default export
+export default LandingPage;
+</code></pre>
+        </article>
+    </section>
 
 
 

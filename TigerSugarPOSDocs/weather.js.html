@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: weather.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,108 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: weather.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import './weather.css';
 
+/**
+ * Functional component representing a weather display.
+ * @function WeatherComponent
+ * @returns {JSX.Element} JSX element containing weather information.
+ */
+const WeatherComponent = () => {
+  /**
+   * State to store weather data received from the API.
+   * @type {object | null}
+   */
+  const [weatherData, setWeatherData] = useState(null);
 
-    <h3> </h3>
+  /**
+   * State to manage the loading status of weather data.
+   * @type {boolean}
+   */
+  const [loading, setLoading] = useState(true);
 
+  /**
+   * Effect hook to fetch weather data based on user's geolocation.
+   * @function useEffect
+   * @param {function} getWeatherData - Function to fetch weather data.
+   * @param {Array} [] - Empty dependency array to ensure the effect runs only once.
+   */
+  useEffect(() => {
+    /**
+     * Function to fetch weather data using the OpenWeatherMap API.
+     * @function getWeatherData
+     */
+    const getWeatherData = async () => {
+      try {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
 
+          const apiKey = '81260794ba7f1cef3cb0d8917e365e72';
+          const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&amp;lon=${longitude}&amp;appid=${apiKey}&amp;units=metric`;
 
+          const response = await fetch(apiUrl);
+          const data = await response.json();
 
+          setWeatherData(data);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+        setLoading(false);
+      }
+    };
 
+    getWeatherData();
+  }, []);
 
+  /**
+   * Render loading message while weather data is being fetched.
+   * @returns {JSX.Element} Loading message.
+   */
+  if (loading) {
+    return &lt;p>Loading...&lt;/p>;
+  }
 
+  /**
+   * Render message if weather data cannot be fetched.
+   * @returns {JSX.Element} Error message.
+   */
+  if (!weatherData) {
+    return &lt;p>Unable to fetch weather data.&lt;/p>;
+  }
 
+  /**
+   * Render weather information if available.
+   * @returns {JSX.Element} Weather information.
+   */
+  return (
+    (typeof weatherData.main !== 'undefined') ? (
+      &lt;div className='weatherContainer'>
+        {/* &lt;h2>Weather Information&lt;/h2> */}
+        &lt;p>Location: {weatherData.name}&lt;/p>
+        &lt;p>Temperature: {weatherData.main.temp}°C&lt;/p>
+        &lt;p>Weather: {weatherData.weather[0].description}&lt;/p>
+      &lt;/div>
+    ) : (
+      &lt;div>&lt;/div>
+    )
+  );
+};
 
-
-    
-
-
-
-
-
+export default WeatherComponent;
+</code></pre>
+        </article>
+    </section>
 
 
 
