@@ -107,7 +107,7 @@
 
             <div class="col-12" id="container">
                 <h3 class="mb-4 text-center">contact</h3>
-                <form action="mailto: contact@wyattjamesferguson.com" method="get" class="contact-form webform" role="form" enctype="text/plain">
+                <form action="javascript:void(0);" onsubmit="submitForm()" method="get" class="contact-form webform" role="form" enctype="text/plain">
             
                     <input type="hidden" name="subject" value="Website Contact">
             
@@ -131,6 +131,19 @@
     </div>
                  
     <!-- SCRIPTS -->
+    <script>
+        function submitForm() {
+            var form = document.querySelector('.contact-form');
+            var formData = new FormData(form);
+            var url = 'mailto:contact@wyattjamesferguson.com?';
+            
+            formData.forEach(function(value, key){
+                url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(value).replace('+', '%20');
+            });
+    
+            window.location.href = url;
+        }
+    </script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/smoothscroll.js"></script>
