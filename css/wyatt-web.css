@@ -451,36 +451,6 @@
      RESPONSIVE STYLES              
   -----------------------------------------*/
 
-  @media screen and (max-width: 1200px) {
-    h1 {
-        font-size: 42px;
-    }
-
-    h2 {
-        font-size: 36px;
-    }
-
-    h3 {
-        font-size: 32px;
-    }
-
-    h4 {
-        font-size: 28px;
-    }
-
-    .email-link {
-      font-size: 28px;
-    }
-  }
-
-  @media screen and (max-width: 992px) {
-	  
-    .email-link {
-      font-size: 22px;
-      padding: 0.5rem 2rem 0.7rem 2rem;
-    }
-  }
-
   @media screen and (max-width: 991px) {
     .navbar-nav {
       margin: 1rem 0;
@@ -492,10 +462,8 @@
     }
   }
 
-  @media screen and (max-width: 480px) {
-
-    .email-link {
-      font-size: 20px;
-      padding: 0.3rem 2rem 0.6rem 2rem;
+  @media screen and (max-width: 350px) {
+    .navbar-brand {
+      font-size: 28px;
     }
   }
